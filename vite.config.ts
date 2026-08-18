@@ -19,7 +19,9 @@ const ssrRpcWebsocketsStub = () =>
     resolveId(
       id: string,
       _importer: string | undefined,
-      options: { ssr?: boolean }
+      options: {
+        ssr?: boolean | undefined;
+      }
     ): string | undefined {
       // rpc-websockets only ships "browser" and "node" export conditions; the
       // workerd SSR build falls through and fails to resolve. The wallet adapter
@@ -30,6 +32,7 @@ const ssrRpcWebsocketsStub = () =>
       return undefined;
     },
   }) satisfies Plugin;
+
 
 export default defineConfig({
   tanstackStart: {
