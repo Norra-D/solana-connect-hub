@@ -37,11 +37,6 @@ export function TipButton({
       return;
     }
 
-    if (RECIPIENT_ADDRESS === "YOUR_SOLANA_DEVNET_WALLET_ADDRESS") {
-      toast.error("Please set a recipient address in TipButton.tsx");
-      return;
-    }
-
     let recipient: PublicKey;
     try {
       recipient = new PublicKey(RECIPIENT_ADDRESS);
