@@ -145,6 +145,13 @@
   }
 }
 
+@utility glass-card {
+  background: color-mix(in oklab, var(--color-card) 55%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-border) 80%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: 0 24px 60px -30px oklch(0 0 0 / 60%);
+}
+
 @layer components {
   .wallet-connect-button {
     background: linear-gradient(
