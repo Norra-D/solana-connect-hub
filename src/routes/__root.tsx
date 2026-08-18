@@ -151,6 +151,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {hydrated ? <WalletProviders>{app}</WalletProviders> : app}
+      <Toaster />
     </QueryClientProvider>
   );
 }
