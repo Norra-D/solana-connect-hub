@@ -13,7 +13,17 @@ import { Button } from "@/components/ui/button";
 // TODO: Replace this with your actual Solana Devnet wallet address.
 const RECIPIENT_ADDRESS = "YOUR_SOLANA_DEVNET_WALLET_ADDRESS";
 
-export function TipButton() {
+interface TipButtonProps {
+  amount?: number;
+  label?: string;
+  className?: string;
+}
+
+export function TipButton({
+  amount = 0.01,
+  label = "Tip Developer",
+  className,
+}: TipButtonProps) {
   const { publicKey, sendTransaction } = useWallet();
   const { connection } = useConnection();
   const [sending, setSending] = useState(false);
@@ -47,7 +57,7 @@ export function TipButton() {
         SystemProgram.transfer({
           fromPubkey: publicKey,
           toPubkey: recipient,
-          lamports: 0.05 * LAMPORTS_PER_SOL,
+          lamports: Math.round(amount * LAMPORTS_PER_SOL),
         })
       );
 
@@ -64,8 +74,8 @@ export function TipButton() {
   }
 
   return (
-    <Button onClick={handleTip} disabled={sending} className="w-full sm:w-auto">
-      {sending ? "Sending..." : "Tip 0.05 SOL"}
+    <Button onClick={handleTip} disabled={sending} className={className}>
+      {sending ? "Sending..." : `${label} ${amount} SOL`}
     </Button>
   );
 }
