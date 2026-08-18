@@ -1,5 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { ClientOnly } from "@/components/ClientOnly";
+import { WalletInfo } from "@/components/wallet/WalletInfo";
+import { TipButton } from "@/components/wallet/TipButton";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -33,6 +37,12 @@ function Index() {
           Connect your wallet to get started. The app is configured for the Solana Devnet
           cluster and uses the standard wallet adapter for broad browser-extension support.
         </p>
+        <ClientOnly>
+          <div className="flex flex-col items-center justify-center gap-3">
+            <WalletInfo />
+            <TipButton />
+          </div>
+        </ClientOnly>
         <div className="flex flex-wrap justify-center gap-3">
           <span className="inline-flex items-center rounded-full border border-border bg-secondary px-3 py-1 text-sm font-medium text-secondary-foreground">
             @solana/web3.js
