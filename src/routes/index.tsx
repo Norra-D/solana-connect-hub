@@ -1,5 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { ClientOnly } from "@/components/ClientOnly";
+import { WalletInfo } from "@/components/wallet/WalletInfo";
+import { TipButton } from "@/components/wallet/TipButton";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
