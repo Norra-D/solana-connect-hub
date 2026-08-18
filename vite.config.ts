@@ -12,4 +12,16 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    resolve: {
+      alias: {
+        // rpc-websockets only exposes "browser" and "node" export conditions; the
+        // workerd SSR build falls through and fails to resolve. Force the browser
+        // build because wallet adapter code is gated to the client and never runs
+        // on the server.
+        "rpc-websockets": "rpc-websockets/dist/index.browser.mjs",
+      },
+    },
+  },
 });
+
