@@ -10,6 +10,7 @@ import {
 import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import walletAdapterCss from "@solana/wallet-adapter-react-ui/styles.css?url";
 import { Header } from "@/components/layout/Header";
 import { WalletProviders } from "@/components/wallet/WalletProviders";
 import { reportLovableError } from "../lib/lovable-error-reporting";
