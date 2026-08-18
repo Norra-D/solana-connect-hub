@@ -10,8 +10,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 
-// TODO: Replace this with your actual Solana Devnet wallet address.
-const RECIPIENT_ADDRESS = "YOUR_SOLANA_DEVNET_WALLET_ADDRESS";
+const RECIPIENT_ADDRESS = "DN5WsfVrNUZxjAxLuoFtGAhFByRiAPLWCdUS3EzDt1EP";
 
 interface TipButtonProps {
   amount?: number;
@@ -35,11 +34,6 @@ export function TipButton({
   async function handleTip() {
     if (!publicKey || !sendTransaction) {
       toast.error("Wallet not ready");
-      return;
-    }
-
-    if (RECIPIENT_ADDRESS === "YOUR_SOLANA_DEVNET_WALLET_ADDRESS") {
-      toast.error("Please set a recipient address in TipButton.tsx");
       return;
     }
 
