@@ -27,7 +27,7 @@ interface TipButtonProps {
   className?: string;
 }
 
-function DisabledTip({ amount, className }: { amount: number; className?: string }) {
+function DisabledTip({ amount, className }: { amount: number; className?: string | undefined }) {
   return (
     <Button disabled variant="secondary" className={className}>
       Connect Wallet to Tip {amount} SOL
