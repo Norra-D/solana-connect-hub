@@ -9,8 +9,17 @@ import {
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { ClientOnly } from "@/components/ClientOnly";
 
 const RECIPIENT_ADDRESS = "DN5WsfVrNUZxjAxLuoFtGAhFByRiAPLWCdUS3EzDt1EP";
+
+function safeRecipient(): PublicKey | null {
+  try {
+    return new PublicKey(RECIPIENT_ADDRESS);
+  } catch {
+    return null;
+  }
+}
 
 interface TipButtonProps {
   amount?: number;
@@ -18,7 +27,15 @@ interface TipButtonProps {
   className?: string;
 }
 
-export function TipButton({
+function DisabledTip({ amount, className }: { amount: number; className?: string }) {
+  return (
+    <Button disabled variant="secondary" className={className}>
+      Connect Wallet to Tip {amount} SOL
+    </Button>
+  );
+}
+
+function TipButtonInner({
   amount = 0.01,
   label = "Tip Developer",
   className,
@@ -28,7 +45,7 @@ export function TipButton({
   const [sending, setSending] = useState(false);
 
   if (!publicKey) {
-    return null;
+    return <DisabledTip amount={amount} className={className} />;
   }
 
   async function handleTip() {
@@ -37,10 +54,8 @@ export function TipButton({
       return;
     }
 
-    let recipient: PublicKey;
-    try {
-      recipient = new PublicKey(RECIPIENT_ADDRESS);
-    } catch {
+    const recipient = safeRecipient();
+    if (!recipient) {
       toast.error("Invalid recipient address");
       return;
     }
@@ -71,5 +86,15 @@ export function TipButton({
     <Button onClick={handleTip} disabled={sending} className={className}>
       {sending ? "Sending..." : `${label} ${amount} SOL`}
     </Button>
+  );
+}
+
+export function TipButton(props: TipButtonProps) {
+  return (
+    <ClientOnly
+      fallback={<DisabledTip amount={props.amount ?? 0.01} className={props.className} />}
+    >
+      <TipButtonInner {...props} />
+    </ClientOnly>
   );
 }
