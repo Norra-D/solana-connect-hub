@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import {
   LAMPORTS_PER_SOL,
   PublicKey,
@@ -27,9 +28,16 @@ interface TipButtonProps {
   className?: string;
 }
 
-function DisabledTip({ amount, className }: { amount: number; className?: string | undefined }) {
+function DisconnectedTip({
+  amount,
+  className,
+}: {
+  amount: number;
+  className?: string | undefined;
+}) {
+  const { setVisible } = useWalletModal();
   return (
-    <Button disabled variant="secondary" className={className}>
+    <Button onClick={() => setVisible(true)} variant="secondary" className={className}>
       Connect Wallet to Tip {amount} SOL
     </Button>
   );
@@ -45,7 +53,7 @@ function TipButtonInner({
   const [sending, setSending] = useState(false);
 
   if (!publicKey) {
-    return <DisabledTip amount={amount} className={className} />;
+    return <DisconnectedTip amount={amount} className={className} />;
   }
 
   async function handleTip() {
@@ -90,9 +98,14 @@ function TipButtonInner({
 }
 
 export function TipButton(props: TipButtonProps) {
+  const amount = props.amount ?? 0.01;
   return (
     <ClientOnly
-      fallback={<DisabledTip amount={props.amount ?? 0.01} className={props.className} />}
+      fallback={
+        <Button disabled variant="secondary" className={props.className}>
+          Connect Wallet to Tip {amount} SOL
+        </Button>
+      }
     >
       <TipButtonInner {...props} />
     </ClientOnly>
