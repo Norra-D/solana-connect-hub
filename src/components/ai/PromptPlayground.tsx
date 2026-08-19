@@ -160,8 +160,11 @@ export function PromptPlayground() {
       {(output || streaming) && (
         <div className="mt-6 rounded-xl border border-border bg-background/50 p-4">
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-            <span className="truncate text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              Optimized output
+            <span className="flex min-w-0 items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              <span className="truncate">Optimized output</span>
+              {streaming && (
+                <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-primary" />
+              )}
             </span>
             <Button
               variant="ghost"
@@ -171,7 +174,7 @@ export function PromptPlayground() {
               className="shrink-0 gap-1.5"
             >
               {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-              {copied ? "Copied" : "Copy"}
+              {copied ? "Copied" : "Copy to Clipboard"}
             </Button>
           </div>
           <pre className="mt-3 whitespace-pre-wrap break-words font-mono text-sm leading-relaxed text-foreground">
