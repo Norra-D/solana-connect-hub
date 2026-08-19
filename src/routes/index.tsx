@@ -52,9 +52,7 @@ function Index() {
           </ClientOnly>
         </header>
 
-        <ClientOnly>
-          <PromptPlayground />
-        </ClientOnly>
+        <PromptPlayground />
       </div>
     </main>
   );
