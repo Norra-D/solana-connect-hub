@@ -1,12 +1,24 @@
 import { useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { PublicKey } from "@solana/web3.js";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { ClientOnly } from "@/components/ClientOnly";
+
+const RECIPIENT_ADDRESS = "DN5WsfVrNUZxjAxLuoFtGAhFByRiAPLWCdUS3EzDt1EP";
+
+function safeRecipient(): PublicKey | null {
+  try {
+    return new PublicKey(RECIPIENT_ADDRESS);
+  } catch {
+    return null;
+  }
+}
 
 interface MintProofButtonProps {
   prompt: string;
-  className?: string;
+  className?: string | undefined;
 }
 
 function mockSignature() {
@@ -18,17 +30,29 @@ function mockSignature() {
   return out;
 }
 
-export function MintProofButton({ prompt, className }: MintProofButtonProps) {
+function DisabledMint({ className }: { className?: string | undefined }) {
+  return (
+    <Button disabled variant="secondary" className={className}>
+      Connect Wallet to Mint Proof-of-Creation
+    </Button>
+  );
+}
+
+function MintProofButtonInner({ prompt, className }: MintProofButtonProps) {
   const { publicKey } = useWallet();
   const [minting, setMinting] = useState(false);
 
   if (!publicKey) {
-    return null;
+    return <DisabledMint className={className} />;
   }
 
   async function handleMint() {
     if (!prompt.trim()) {
       toast.error("Write a prompt before minting");
+      return;
+    }
+    if (!safeRecipient()) {
+      toast.error("Invalid program address");
       return;
     }
 
@@ -50,5 +74,13 @@ export function MintProofButton({ prompt, className }: MintProofButtonProps) {
     >
       {minting ? "Minting..." : "Mint Prompt as Proof-of-Creation"}
     </Button>
+  );
+}
+
+export function MintProofButton(props: MintProofButtonProps) {
+  return (
+    <ClientOnly fallback={<DisabledMint className={props.className} />}>
+      <MintProofButtonInner {...props} />
+    </ClientOnly>
   );
 }
